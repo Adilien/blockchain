@@ -160,8 +160,7 @@ def new_transaction():
 @app.route('/mine', methods=['GET'])
 def mine():
     last_block = blockchain.last_block
-    last_proof = blockchain.last_block['proof']
-    proof = blockchain.proof_of_work(last_proof)
+    proof = blockchain.proof_of_work(last_block)
 
     blockchain.new_transaction(
         sender="0",
@@ -198,6 +197,8 @@ def register_nodes():
     response = {
         'message': 'New nodes have been added',
         'total_nodes': list(blockchain.nodes),
+        'value': request.get_json(),
+        'nodes': values.get('nodes'),
     }
 
     return jsonify(response), 201
