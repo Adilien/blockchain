@@ -30,10 +30,12 @@ class BlockChain(object):
             print(f'{block}')
             print(f'\n-----\n')
 
-            if block['previous_hash'] != self.hash(last_block):
+            last_block_hash = self.hash(last_block)
+
+            if block['previous_hash'] != last_block_hash:
                 return False
 
-            if not self.valid_proof(last_block['proof'], block['proof']):
+            if not self.valid_proof(last_block['proof'], block['proof'], last_block_hash):
                 return False
 
             last_block = block
@@ -185,7 +187,6 @@ def mine():
 @app.route('/nodes/register', methods=['POST'])
 def register_nodes():
     values = request.get_json()
-
     nodes = values.get('nodes')
 
     if nodes is None:
